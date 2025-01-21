@@ -1,0 +1,22 @@
+<form action="/upload" method="POST" enctype="multipart/form-data">
+    <input type="file" name="image" required>
+    <button type="submit">Subir Imagen</button>
+</form>
+
+<h3>Imágenes pendientes</h3>
+<ul>
+    <% images.forEach(image => { %>
+        <li>
+            <img src="/uploads/<%= image.filename %>" width="100" alt="<%= image.filename %>">
+            <!-- Formulario para aprobar la imagen -->
+            <form action="/approve/<%= image.id %>" method="POST" style="display:inline;">
+                <button type="submit">Aprobar</button>
+            </form>
+            <!-- Formulario para eliminar la imagen -->
+            <form action="/delete/<%= image.id %>" method="POST" style="display:inline;">
+                <button type="submit">Eliminar</button>
+            </form>
+        </li>
+    <% }); %>
+</ul>
+
