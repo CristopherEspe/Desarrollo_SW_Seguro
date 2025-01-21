@@ -1,9 +1,8 @@
 from flask import Flask, request, jsonify
 import os
 from werkzeug.utils import secure_filename
-from analysis import calculate_entropy, analyze_jpeg_structure, analyze_with_binwalk, analyze_with_pngcheck
+from analysis import analyze_with_binwalk, analyze_with_pngcheck
 import mysql.connector
-
 
 # curl -X POST -F "file=@C:\Users\Cristopher\Documents\OpenPuff_release\images\Gorila.png" http://localhost:5000/upload
 
@@ -36,8 +35,6 @@ def upload_file():
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     file.save(file_path)
 
-    entropy = calculate_entropy(file_path)
-    jpeg_structure = analyze_jpeg_structure(file_path)
     binwalk_analysis = analyze_with_binwalk(file_path)
     png_analysis = analyze_with_pngcheck(file_path)
 
@@ -56,13 +53,25 @@ def upload_file():
 
     report = {
         'file': filename,
-        'entropy': entropy,
-        'jpeg_structure': jpeg_structure,
         'binwalk_analysis': binwalk_analysis,
         'png_analysis': png_analysis,
         'message': 'Image uploaded successfully and pending approval.'
     }
     return jsonify(report)
+
+@app.route('/images', methods=['GET'])
+def get_images():
+    try:
+        conn = connect_db()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM images")
+        images = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return jsonify(images)
+    except Exception as e:
+        return jsonify({'error': f'Database error: {str(e)}'}), 500
+
 
 @app.route('/approve/<int:image_id>', methods=['POST'])
 def approve_image(image_id):
