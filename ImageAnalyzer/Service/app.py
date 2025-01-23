@@ -4,11 +4,10 @@ from werkzeug.utils import secure_filename
 from analysis import analyze_with_binwalk, analyze_with_pngcheck
 import mysql.connector
 
-# curl -X POST -F "file=@C:\Users\Cristopher\Documents\OpenPuff_release\images\Gorila.png" http://localhost:5000/upload
-
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'uploads')
 
+# Configuración de la base de datos
 DB_CONFIG = {
     'host': 'localhost',
     'user': 'root',
@@ -17,27 +16,43 @@ DB_CONFIG = {
 }
 
 def connect_db():
-    return mysql.connector.connect(**DB_CONFIG)
+    """
+    Crea una conexión a la base de datos.
+    """
+    try:
+        return mysql.connector.connect(**DB_CONFIG)
+    except mysql.connector.Error as e:
+        raise Exception(f"Database connection error: {e}")
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
+    """
+    Sube un archivo, lo analiza y guarda los detalles en la base de datos.
+    """
     if 'file' not in request.files:
-        return jsonify({'error': 'No file part'}), 400
+        return jsonify({'error': 'No file part provided'}), 400
 
     file = request.files['file']
     if file.filename == '':
-        return jsonify({'error': 'No selected file'}), 400
+        return jsonify({'error': 'No file selected'}), 400
 
+    # Crear directorio de uploads si no existe
     if not os.path.exists(app.config['UPLOAD_FOLDER']):
         os.makedirs(app.config['UPLOAD_FOLDER'])
 
+    # Guardar archivo
     filename = secure_filename(file.filename)
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    file.save(file_path)
+    try:
+        file.save(file_path)
+    except Exception as e:
+        return jsonify({'error': f'Failed to save file: {str(e)}'}), 500
 
+    # Realizar análisis
     binwalk_analysis = analyze_with_binwalk(file_path)
     png_analysis = analyze_with_pngcheck(file_path)
 
+    # Guardar datos en la base de datos
     try:
         conn = connect_db()
         cursor = conn.cursor()
@@ -51,6 +66,7 @@ def upload_file():
     except Exception as e:
         return jsonify({'error': f'Database error: {str(e)}'}), 500
 
+    # Respuesta
     report = {
         'file': filename,
         'binwalk_analysis': binwalk_analysis,
@@ -61,6 +77,9 @@ def upload_file():
 
 @app.route('/images', methods=['GET'])
 def get_images():
+    """
+    Recupera la lista de imágenes almacenadas en la base de datos.
+    """
     try:
         conn = connect_db()
         cursor = conn.cursor(dictionary=True)
@@ -72,13 +91,15 @@ def get_images():
     except Exception as e:
         return jsonify({'error': f'Database error: {str(e)}'}), 500
 
-
 @app.route('/approve/<int:image_id>', methods=['POST'])
 def approve_image(image_id):
+    """
+    Aprueba una imagen cambiando su estado en la base de datos.
+    """
     try:
         conn = connect_db()
         cursor = conn.cursor()
-        cursor.execute("CALL approve_image(%s, %s)", (image_id, 1))
+        cursor.execute("CALL approve_image(%s, %s)", (image_id, 1))  # Ajustar según tu procedimiento almacenado
         conn.commit()
         cursor.close()
         conn.close()
@@ -88,11 +109,30 @@ def approve_image(image_id):
 
 @app.route('/reject/<int:image_id>', methods=['POST'])
 def reject_image(image_id):
+    """
+    Rechaza una imagen eliminándola de la base de datos y del sistema de archivos.
+    """
     try:
         conn = connect_db()
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
+
+        # Obtener información de la imagen antes de eliminarla
+        cursor.execute("SELECT filepath FROM images WHERE id = %s", (image_id,))
+        image = cursor.fetchone()
+
+        if not image:
+            return jsonify({'error': 'Image not found'}), 404
+
+        file_path = image['filepath']
+
+        # Llamar al procedimiento almacenado para rechazar la imagen
         cursor.execute("CALL reject_image(%s)", (image_id,))
         conn.commit()
+
+        # Eliminar archivo del sistema
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
         cursor.close()
         conn.close()
         return jsonify({'message': 'Image rejected and deleted successfully'})

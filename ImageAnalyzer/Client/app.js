@@ -1,12 +1,14 @@
 const express = require('express');
 const path = require('path');
 const multer = require('multer');
+
 const bcrypt = require('bcryptjs');
 const mysql = require('mysql2');
 const session = require('express-session');
 const dotenv = require('dotenv');
 const axios = require('axios');
 const FormData = require('form-data');
+const fs = require('fs');
 
 
 dotenv.config();
@@ -37,13 +39,7 @@ db.connect((err) => {
   console.log('Conectado a la base de datos');
 });
 
-// // Configuración de multer para subir imágenes
-// const storage = multer.diskStorage({
-//   destination: './public/uploads/',
-//   filename: (req, file, cb) => {
-//     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-//   }
-// });
+// Configuración de multer para subir imágenes
 const upload = multer({
   storage: multer.diskStorage({
     destination: './public/uploads/',
@@ -59,7 +55,10 @@ app.get('/login', (req, res) => res.render('login'));
 app.get('/register', (req, res) => res.render('register'));
 app.get('/dashboard', (req, res) => {
   if (!req.session.loggedin) return res.redirect('/login');
-  res.render('dashboard', { user: req.session.user });
+  db.query('SELECT * FROM images WHERE status = "pending"', (err, results) => {
+    if (err) throw err;
+    res.render('dashboard', { user: req.session.user, images: results });
+  });
 });
 
 app.post('/login', (req, res) => {
@@ -99,36 +98,32 @@ app.post('/register', async (req, res) => {
   });
 });
 
-app.get('/dashboard', (req, res) => {
-  if (!req.session.loggedin) return res.redirect('/login');
-  if (req.session.user) {
-    db.query('SELECT * FROM images WHERE status = "pending"', (err, results) => {
-      if (err) throw err;
-      res.render('dashboard', { user: req.session.user, images: results });
-    });
-  } else {
-    res.redirect('/login');
-  }
-});
-
 // Subida de imágenes
+app.get('/upload', (req, res) => {
+  // Cualquier usuario puede acceder a esta ruta
+  res.render('upload'); // Renderiza la vista para subir imágenes
+});
 app.post('/upload', upload.single('image'), async (req, res) => {
   if (!req.file) {
     return res.status(400).send('No se ha enviado ningún archivo');
   }
 
-  const form = new FormData();
-  form.append('file', req.file.buffer, {
-    filename: req.file.originalname,
-    contentType: req.file.mimetype
-  });
+  const filePath = req.file.path; // Ruta del archivo guardado
 
   try {
+    const form = new FormData();
+    form.append('file', fs.createReadStream(filePath), {
+      filename: req.file.originalname,
+      contentType: req.file.mimetype
+    });
+
     const response = await axios.post('http://localhost:5000/upload', form, {
       headers: {
         ...form.getHeaders()
       }
     });
+
+    // Aquí puedes guardar la información del archivo en la base de datos si es necesario
 
     res.send(response.data);
   } catch (error) {
@@ -137,18 +132,12 @@ app.post('/upload', upload.single('image'), async (req, res) => {
   }
 });
 
-
 app.get('/api/images', (req, res) => {
   db.query('SELECT id, filename, status FROM images', (err, results) => {
     if (err) return res.status(500).json({ error: 'Error al obtener imágenes' });
     res.json(results);
   });
 });
-
-app.get('/upload', (req, res) => {
-  res.render('upload');
-});
-
 
 app.post('/approve/:id', (req, res) => {
   db.query('UPDATE images SET status = "approved" WHERE id = ?', [req.params.id], (err) => {
@@ -163,6 +152,5 @@ app.post('/delete/:id', (req, res) => {
     res.redirect('/dashboard');
   });
 });
-
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));

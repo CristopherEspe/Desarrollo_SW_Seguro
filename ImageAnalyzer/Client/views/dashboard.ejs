@@ -1,2 +1,108 @@
-<div id="image-gallery"></div>
-<script src="/js/dashboard.js"></script>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Imágenes a Aprobar</title>
+    <style>
+        /* Estilo general del cuerpo */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e9ecef; /* Fondo gris claro */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Altura mínima de la pantalla */
+        }
+
+        /* Caja externa para la lista de imágenes */
+        .container {
+            background-color: #fff; /* Fondo blanco */
+            max-width: 900px; /* Ancho máximo */
+            width: 90%; /* Ancho adaptable */
+            padding: 20px;
+            border-radius: 10px; /* Bordes redondeados */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+            text-align: center;
+        }
+
+        /* Estilo del título */
+        h2 {
+            color: #333; /* Texto oscuro */
+            margin-bottom: 20px;
+        }
+
+        /* Estilo para la galería de imágenes */
+        #image-gallery {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 5 columnas fijas */
+            gap: 15px; /* Espaciado entre las cajas */
+        }
+
+        .image-item {
+            background-color: #fff; /* Fondo blanco para cada caja */
+            border-radius: 10px; /* Bordes redondeados */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave para las cajas */
+            overflow: hidden; /* Ocultar contenido desbordado */
+            padding: 10px; /* Espaciado interno en la caja */
+            text-align: center;
+        }
+
+        .image-item img {
+            width: 100%; /* Ancho completo dentro de la caja */
+            height: auto; /* Mantener proporciones */
+            border-radius: 5px; /* Bordes redondeados para las imágenes */
+        }
+
+        .image-item p {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555; /* Texto gris oscuro para descripciones o etiquetas */
+        }
+
+        @media (max-width: 800px) {
+            #image-gallery {
+                grid-template-columns: repeat(3, 1fr); /* Cambiar a 3 columnas en pantallas más pequeñas */
+            }
+        }
+
+        @media (max-width: 500px) {
+            #image-gallery {
+                grid-template-columns: repeat(2, 1fr); /* Cambiar a 2 columnas en pantallas aún más pequeñas */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Lista de Imágenes a Aprobar</h2>
+        <div id="image-gallery">
+            <!-- Cada imagen está dentro de una caja -->
+            <div class="image-item">
+                <img src="ruta/a/imagen1.jpg" alt="Imagen 1">
+                <p>Imagen 1</p>
+            </div>
+            <div class="image-item">
+                <img src="ruta/a/imagen2.jpg" alt="Imagen 2">
+                <p>Imagen 2</p>
+            </div>
+            <div class="image-item">
+                <img src="ruta/a/imagen3.jpg" alt="Imagen 3">
+                <p>Imagen 3</p>
+            </div>
+            <div class="image-item">
+                <img src="ruta/a/imagen4.jpg" alt="Imagen 4">
+                <p>Imagen 4</p>
+            </div>
+            <div class="image-item">
+                <img src="ruta/a/imagen5.jpg" alt="Imagen 5">
+                <p>Imagen 5</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>

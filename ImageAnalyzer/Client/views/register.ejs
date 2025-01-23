@@ -1,6 +1,74 @@
-<form action="/register" method="POST">
-    <h2>Registro de usuario</h2>
-    <input type="text" name="username" placeholder="Usuario" required>
-    <input type="password" name="password" placeholder="Contraseña" required>
-    <button type="submit">Registrarse</button>
-</form>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario</title>
+    <style>
+        /* Estilo general del cuerpo */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e9ecef; /* Fondo gris claro */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Altura mínima de la pantalla */
+        }
+
+        /* Caja externa para el formulario */
+        .container {
+            background-color: #fff; /* Fondo blanco */
+            max-width: 400px; /* Ancho máximo */
+            width: 90%; /* Ancho adaptable */
+            padding: 20px;
+            border-radius: 10px; /* Bordes redondeados */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+            text-align: center;
+        }
+
+        /* Estilo del título del formulario */
+        h2 {
+            color: #333; /* Texto oscuro */
+            margin-bottom: 20px;
+        }
+
+        /* Estilo de los campos de entrada */
+        input[type="text"], input[type="password"] {
+            width: calc(100% - 20px); /* Ancho completo menos padding */
+            padding: 10px;
+            margin-bottom: 15px; /* Espaciado entre campos */
+            border: 1px solid #ccc; /* Borde gris claro */
+            border-radius: 5px; /* Bordes redondeados */
+            font-size: 16px; /* Tamaño de fuente */
+        }
+
+        /* Estilo del botón de envío */
+        button {
+            background-color: #007BFF; /* Azul principal */
+            color: #fff; /* Texto blanco */
+            padding: 10px 15px;
+            border: none; /* Sin borde */
+            border-radius: 5px; /* Bordes redondeados */
+            cursor: pointer; /* Cambia el cursor al pasar el ratón */
+            font-size: 16px; /* Tamaño de fuente */
+            transition: background-color 0.3s ease; /* Transición suave al hover */
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Azul más oscuro al pasar el ratón */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form action="/register" method="POST">
+            <h2>Registro de usuario</h2>
+            <input type="text" name="username" placeholder="Usuario" required>
+            <input type="password" name="password" placeholder="Contraseña" required>
+            <button type="submit">Registrarse</button>
+        </form>
+    </div>
+</body>
+</html>

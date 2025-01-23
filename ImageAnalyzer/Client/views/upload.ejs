@@ -1,16 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subir Imagen</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        /* Estilo general del cuerpo */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e9ecef; /* Fondo gris claro */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Altura mínima de la pantalla */
+        }
+
+        /* Caja externa para el formulario */
+        .container {
+            background-color: #fff; /* Fondo blanco */
+            max-width: 400px; /* Ancho máximo */
+            width: 90%; /* Ancho adaptable */
+            padding: 20px;
+            border-radius: 10px; /* Bordes redondeados */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+            text-align: center;
+        }
+
+        /* Estilo del título del formulario */
+        h1 {
+            color: #333; /* Texto oscuro */
+            margin-bottom: 20px;
+        }
+
+        /* Estilo del campo de entrada de archivo */
+        input[type="file"] {
+            margin-bottom: 15px; /* Espaciado entre campos */
+            border-radius: 5px; /* Bordes redondeados */
+            padding: 10px; /* Espaciado interno */
+            border: 1px solid #ccc; /* Borde gris claro */
+            width: calc(100% - 22px); /* Ancho completo menos padding y borde */
+        }
+
+        /* Estilo del botón de envío */
+        button {
+            background-color: #007BFF; /* Azul principal */
+            color: #fff; /* Texto blanco */
+            padding: 10px 15px;
+            border: none; /* Sin borde */
+            border-radius: 5px; /* Bordes redondeados */
+            cursor: pointer; /* Cambia el cursor al pasar el ratón */
+            font-size: 16px; /* Tamaño de fuente */
+            transition: background-color 0.3s ease; /* Transición suave al hover */
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Azul más oscuro al pasar el ratón */
+        }
+    </style>
 </head>
 <body>
-    <h1>Subir una Imagen</h1>
-    <form action="/upload" method="POST" enctype="multipart/form-data">
-        <input type="file" name="image" required>
-        <button type="submit">Subir</button>
-    </form>    
+    <div class="container">
+        <h1>Subir una Imagen</h1>
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <input type="file" name="image" required>
+            <button type="submit">Subir</button>
+        </form>    
+    </div>
 </body>
 </html>
+
