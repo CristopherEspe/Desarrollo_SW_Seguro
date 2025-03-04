@@ -1,0 +1,43 @@
+<div class="card">
+    <h2>Gestión de Inventario (Admin)</h2>
+    <button pButton label="Nuevo Inventario" (click)="showCreateDialog()" class="p-button-success"></button>
+    
+    <p-table [value]="inventories" [tableStyle]="{ 'min-width': '50rem' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Producto</th>
+          <th>Stock</th>
+          <th>Última Actualización</th>
+          <th>Acciones</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-inventory>
+        <tr>
+          <td>{{ getProductName(inventory.productId) }}</td>
+          <td>{{ inventory.stock }}</td>
+          <td>{{ inventory.lastUpdated | date:'medium' }}</td>
+          <td>
+            <button pButton label="Editar" (click)="showEditDialog(inventory)" class="p-button-warning"></button>
+            <button pButton label="Eliminar" (click)="deleteInventory(inventory.productId)" class="p-button-danger"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  
+    <p-dialog header="{{ selectedInventory.id === 0 ? 'Nuevo Inventario' : 'Editar Inventario' }}" [(visible)]="displayDialog" [style]="{ width: '50vw' }">
+      <div class="p-field">
+        <label for="productId">Producto</label>
+        <select pInputText id="productId" [(ngModel)]="selectedInventory.productId">
+          <option *ngFor="let product of products" [value]="product.id">{{ product.name }}</option>
+        </select>
+      </div>
+      <div class="p-field">
+        <label for="stock">Stock</label>
+        <input pInputText id="stock" type="number" [(ngModel)]="selectedInventory.stock" />
+      </div>
+      <ng-template pTemplate="footer">
+        <button pButton label="Guardar" (click)="saveInventory()" class="p-button-success"></button>
+        <button pButton label="Cancelar" (click)="displayDialog = false" class="p-button-secondary"></button>
+      </ng-template>
+    </p-dialog>
+  </div>

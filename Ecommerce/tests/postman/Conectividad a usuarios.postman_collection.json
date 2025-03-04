@@ -1,0 +1,276 @@
+{
+	"info": {
+		"_postman_id": "2a209e23-537e-4644-bd36-f11254338bf7",
+		"name": "Conectividad a usuarios",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37799145"
+	},
+	"item": [
+		{
+			"name": "Post users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Listas ampliadas de nombres y apellidos predefinidos\r",
+							"const firstNames = [\r",
+							"    \"Juanito\", \"Carlos\", \"Luis\", \"Miguel\", \"Alejandro\", \"Fernando\", \"Javier\", \"Antonio\", \"David\", \"Ricardo\",\r",
+							"    \"Sofia\", \"Isabella\", \"Valeria\", \"Camila\", \"Gabriela\", \"Natalia\", \"Daniela\", \"Laura\", \"Mariana\", \"Paola\"\r",
+							"];\r",
+							"\r",
+							"const lastNames = [\r",
+							"    \"Peralta\", \"Gonzalez\", \"Martinez\", \"Lopez\", \"Hernandez\", \"Rodriguez\", \"Fernandez\", \"Castro\", \"Vasquez\", \"Torres\",\r",
+							"    \"García\", \"Sanchez\", \"Mendez\", \"Romero\", \"Salazar\", \"Jaramillo\", \"Mora\", \"Ospina\", \"Pineda\", \"Castaño\"\r",
+							"];\r",
+							"\r",
+							"// Función para seleccionar un elemento aleatorio de un array\r",
+							"function getRandomElement(array) {\r",
+							"    return array[Math.floor(Math.random() * array.length)];\r",
+							"}\r",
+							"\r",
+							"// Generar un nombre y apellido aleatorio\r",
+							"const firstName = getRandomElement(firstNames);\r",
+							"const lastName = getRandomElement(lastNames);\r",
+							"\r",
+							"// Crear un nombre completo y un correo electrónico\r",
+							"const name = `${firstName} ${lastName}`;\r",
+							"const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@gmail.com`;\r",
+							"\r",
+							"// Generar una contraseña aleatoria\r",
+							"const generateRandomString = (length) => {\r",
+							"    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';\r",
+							"    let result = '';\r",
+							"    for (let i = 0; i < length; i++) {\r",
+							"        result += characters.charAt(Math.floor(Math.random() * characters.length));\r",
+							"    }\r",
+							"    return result;\r",
+							"};\r",
+							"const password = generateRandomString(12); // Contraseña más larga\r",
+							"\r",
+							"// Crear el cuerpo de la solicitud sin el campo `id`\r",
+							"const requestBody = {\r",
+							"    \"name\": name,\r",
+							"    \"email\": email,\r",
+							"    \"password\": password\r",
+							"};\r",
+							"\r",
+							"// Establecer el cuerpo de la solicitud como una variable global\r",
+							"pm.variables.set(\"requestBody\", JSON.stringify(requestBody));\r",
+							"\r",
+							"// Imprimir el cuerpo para verificar\r",
+							"console.log(\"Generated request body:\", requestBody);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{{requestBody}}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8001/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Verificar que la respuesta es JSON\r",
+							"if (pm.response.headers.get('Content-Type') && pm.response.headers.get('Content-Type').includes('application/json')) {\r",
+							"    // Obtener la respuesta en formato JSON\r",
+							"    const responseJson = pm.response.json();\r",
+							"\r",
+							"    // Verificar que la respuesta es un array y no está vacía\r",
+							"    if (Array.isArray(responseJson) && responseJson.length > 0) {\r",
+							"        // Imprimir todos los usuarios en la consola para verificación\r",
+							"        console.log(\"All users:\", responseJson);\r",
+							"    } else {\r",
+							"        console.log(\"No users found in the response.\");\r",
+							"    }\r",
+							"} else {\r",
+							"    console.log(\"Response is not in JSON format or no content returned.\");\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{{randomUser}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8001/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put users",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Generar un ID aleatorio entre 1 y 10\r",
+							"const randomId = Math.floor(Math.random() * 10) + 1;\r",
+							"\r",
+							"// Definir una nueva contraseña\r",
+							"const newPassword = \"newPassword123\";\r",
+							"\r",
+							"// Definir otros datos que se mantendrán o actualizarán\r",
+							"const updatedName = \"Dato Cambiado\"; // Cambia esto según lo que necesites\r",
+							"const updatedEmail = \"updated.email@example.com\"; // Cambia esto según lo que necesites\r",
+							"\r",
+							"// Guardar el ID aleatorio y la nueva contraseña en variables globales\r",
+							"pm.globals.set(\"userId\", randomId);\r",
+							"pm.globals.set(\"newPassword\", newPassword);\r",
+							"pm.globals.set(\"updatedName\", updatedName);\r",
+							"pm.globals.set(\"updatedEmail\", updatedEmail);\r",
+							"\r",
+							"// Imprimir los valores en la consola para verificación\r",
+							"console.log(\"Using random user ID for PUT request:\", randomId);\r",
+							"console.log(\"New password:\", newPassword);\r",
+							"console.log(\"Updated name:\", updatedName);\r",
+							"console.log(\"Updated email:\", updatedEmail);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": {{userId}},               // ID del usuario (generado aleatoriamente)\r\n    \"name\": \"{{updatedName}}\",      // Nombre actualizado (asegúrate de que sea un valor válido si es necesario)\r\n    \"email\": \"{{updatedEmail}}\",    // Email actualizado (asegúrate de que sea un valor válido si es necesario)\r\n    \"password\": \"{{newPassword}}\"   // Nueva contraseña\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8001/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete users",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Generar un ID aleatorio entre 1 y 10\r",
+							"const randomId = Math.floor(Math.random() * 20) + 1;\r",
+							"\r",
+							"// Guardar el ID aleatorio en una variable global\r",
+							"pm.globals.set(\"userId\", randomId);\r",
+							"\r",
+							"// Imprimir el ID en la consola para verificación\r",
+							"console.log(\"Using random user ID for DELETE request:\", randomId);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8001/users/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"users",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,47 @@
+<div class="container px-4 mx-auto">
+    <div class="flex items-center justify-between mt-1 mb-4">
+        <h2 class="text-xl font-bold text-gray-800 dark:text-white">
+            Cursos
+        </h2>
+        @if (authService.isAdmin()) {
+            <p-button
+                label="Nuevo curso"
+                icon="pi pi-plus"
+                class="p-button-success"
+                (click)="goToCourseForm()" />
+        }
+    </div>
+
+    <p-table
+        #table
+        [value]="rows"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        styleClass="p-datatable-striped p-datatable-gridlines"
+    >
+        <ng-template pTemplate="header">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Total matriculados</th>
+                @if (authService.isAdmin()) {
+                    <th class="flex justify-center">Acciones</th>
+                }
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+            <tr>
+                <td>{{ row.data.id }}</td>
+                <td>{{ row.data.name }}</td>
+                <td>{{ row.data.description ?? '-' }}</td>
+                <td>{{ row.data.totals.enrolled }}</td>
+                @if (authService.isAdmin()) {
+                    <td class="flex justify-center">
+                        <p-menu #menu [model]="row.actions" [popup]="true" [appendTo]="table" />
+                        <p-button severity="secondary" size="small" (onClick)="menu.toggle($event)" icon="pi pi-ellipsis-v" />
+                    </td>
+                }
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

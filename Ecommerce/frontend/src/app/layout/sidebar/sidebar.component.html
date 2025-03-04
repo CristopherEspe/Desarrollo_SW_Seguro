@@ -1,0 +1,38 @@
+<aside class="flex flex-col w-64 h-screen px-5 py-8 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700">
+    <a href="#" class="flex items-center gap-2 mb-4 pb-4 text-xl font-semibold text-gray-800 dark:text-gray-200 border-b dark:border-gray-700">
+      Opciones
+    </a>
+  
+    <div class="flex flex-col justify-between flex-1 mt-6">
+      <nav class="flex-1 -mx-3 space-y-3">
+        @for (route of routes; track route) {
+          <a
+            [routerLink]="route.link"
+            routerLinkActive="bg-gray-100 text-blue-700"
+            [routerLinkActiveOptions]="{ exact: false }"
+            class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
+            href="#"
+          >
+            <fa-icon [icon]="route.icon"></fa-icon>
+            <span class="mx-2 text-sm font-medium">{{ route.title }}</span>
+          </a>
+        }
+      </nav>
+    </div>
+  
+    <!-- user section -->
+    @if (isLogged && userProfile) {
+      <div class="flex items-center justify-between p-4 mb-1 bg-gray-100 rounded-lg dark:bg-gray-800">
+        <div class="flex">
+          <div class="flex flex-col ml-3">
+            <span class="text-sm font-medium text-gray-800 dark:text-gray-200">
+              {{ userProfile.username }}
+            </span>
+          </div>
+        </div>
+        <button class="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none" (click)="logout()">
+          <fa-icon [icon]="['fas', 'sign-out-alt']"></fa-icon>
+        </button>
+      </div>
+    }
+  </aside>

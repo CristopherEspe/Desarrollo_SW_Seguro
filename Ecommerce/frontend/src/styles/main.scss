@@ -1,0 +1,28 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+html, body, #main-content {
+    height: 100%;
+    font-size: 16px;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: #e5e6eb;
+}
+
+a {
+    text-decoration: none;
+}
+
+#main-content {
+    display: flex;
+    flex-direction: row;
+
+    .content {
+        flex: 1;
+        padding: 20px;
+    }
+}

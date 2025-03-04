@@ -1,0 +1,258 @@
+{
+	"info": {
+		"_postman_id": "c3fef913-8098-4a37-bc9e-2a88d67722bb",
+		"name": "Conectividad a curso",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37799145"
+	},
+	"item": [
+		{
+			"name": "Post courses",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Lista de nombres de cursos\r",
+							"const courseNames = [\r",
+							"    \"Física\", \r",
+							"    \"Agropecuaria\", \r",
+							"    \"Matemáticas\", \r",
+							"    \"Química\", \r",
+							"    \"Biología\", \r",
+							"    \"Historia\", \r",
+							"    \"Geografía\", \r",
+							"    \"Lengua y Literatura\", \r",
+							"    \"Arte\", \r",
+							"    \"Música\",\r",
+							"    \"Seguridad\",\r",
+							"    \"Aplicaciones Distribuidas\",\r",
+							"    \"Desarrollo de Software\",\r",
+							"];\r",
+							"\r",
+							"// Seleccionar un nombre de curso aleatorio\r",
+							"const randomIndex = Math.floor(Math.random() * courseNames.length);\r",
+							"const courseName = courseNames[randomIndex];\r",
+							"\r",
+							"// Definir una descripción aleatoria para el curso\r",
+							"const courseDescription = `Descripción para el curso de ${courseName}`;\r",
+							"\r",
+							"// Guardar los datos del curso en variables globales\r",
+							"pm.globals.set(\"courseName\", courseName);\r",
+							"pm.globals.set(\"courseDescription\", courseDescription);\r",
+							"\r",
+							"// Imprimir los valores en la consola para verificación\r",
+							"console.log(\"Course name:\", courseName);\r",
+							"console.log(\"Course description:\", courseDescription);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{courseName}}\",          // Nombre del curso (aleatorio)\r\n    \"description\": \"{{courseDescription}}\" // Descripción del curso\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8002/courses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8002",
+					"path": [
+						"courses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get courses",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Verificar que la respuesta tenga el código de estado 200 (OK)\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Verificar que la respuesta sea en formato JSON\r",
+							"pm.test(\"Response should be in JSON format\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"// Verificar que la respuesta contenga una lista de cursos\r",
+							"pm.test(\"Response should contain a list of courses\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.be.an('array');\r",
+							"});\r",
+							"\r",
+							"// Imprimir la respuesta en la consola para inspección\r",
+							"console.log(\"Response body:\", pm.response.json());\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8002/courses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8002",
+					"path": [
+						"courses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put courses",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Generar un ID aleatorio entre 1 y 30\r",
+							"const randomId = Math.floor(Math.random() * 30) + 1;\r",
+							"\r",
+							"// Definir los nuevos valores\r",
+							"const updatedName = \"Nombre Actualizado\";\r",
+							"const updatedDescription = \"Descripción Actualizada\";\r",
+							"\r",
+							"// Guardar el ID aleatorio en una variable global\r",
+							"pm.globals.set(\"courseId\", randomId);\r",
+							"pm.globals.set(\"updatedName\", updatedName);\r",
+							"pm.globals.set(\"updatedDescription\", updatedDescription);\r",
+							"\r",
+							"// Imprimir los valores en la consola para verificación\r",
+							"console.log(\"Course ID:\", randomId);\r",
+							"console.log(\"Updated name:\", updatedName);\r",
+							"console.log(\"Updated description:\", updatedDescription);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"{{courseId}}\",\r\n    \"name\": \"{{updatedName}}\",\r\n    \"description\": \"{{updatedDescription}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8002/courses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8002",
+					"path": [
+						"courses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete courses",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Generar un ID aleatorio entre 1 y 20\r",
+							"const randomId = Math.floor(Math.random() * 20) + 1;\r",
+							"\r",
+							"// Guardar el ID aleatorio en una variable global\r",
+							"pm.globals.set(\"courseId\", randomId);\r",
+							"\r",
+							"// Imprimir el ID en la consola para verificación\r",
+							"console.log(\"Using random course ID for DELETE request:\", randomId);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8002/courses/{{courseId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8002",
+					"path": [
+						"courses",
+						"{{courseId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

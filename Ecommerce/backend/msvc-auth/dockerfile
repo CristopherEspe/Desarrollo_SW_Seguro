@@ -1,0 +1,12 @@
+FROM openjdk:17.0.2
+WORKDIR /app
+COPY ./release/application.jar /app/
+COPY ./default-realm.json /app/
+RUN mkdir -p /target
+EXPOSE 8003
+ENV spring.datasource.url=jdbc:postgresql://localhost:5432/msvc-auth
+ENV keycloak.connectionsJpa.url=jdbc:postgresql://localhost:5432/msvc-auth
+ENV KEYCLOAK_ADMIN=admin
+ENV KEYCLOAK_ADMIN_PASSWORD=admin
+ENV KEYCLOAK_IMPORT_FILE=/app/default-realm.json
+ENTRYPOINT ["java", "-jar", "application.jar"]

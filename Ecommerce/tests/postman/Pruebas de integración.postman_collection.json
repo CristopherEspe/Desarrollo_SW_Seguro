@@ -1,0 +1,157 @@
+{
+	"info": {
+		"_postman_id": "fefc03b1-97e8-4cd0-afe3-eee6302ea220",
+		"name": "Pruebas de integración",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37799145"
+	},
+	"item": [
+		{
+			"name": "Post enrollments",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Obtener todos los usuarios\r",
+							"pm.sendRequest('http://localhost:8001/users', function (err, response) {\r",
+							"    if (err) {\r",
+							"        console.log('Error al obtener usuarios:', err);\r",
+							"        return;\r",
+							"    }\r",
+							"    \r",
+							"    const users = response.json();\r",
+							"    \r",
+							"    // Verificar que la respuesta es válida\r",
+							"    if (Array.isArray(users) && users.length > 0) {\r",
+							"        // Seleccionar un ID de usuario aleatorio del 1 al 30\r",
+							"        const userId = Math.floor(Math.random() * 30) + 1;\r",
+							"        const selectedUser = users.find(user => user.id === userId);\r",
+							"        \r",
+							"        if (selectedUser) {\r",
+							"            pm.globals.set(\"userId\", selectedUser.id);\r",
+							"            pm.globals.set(\"studentName\", selectedUser.name);\r",
+							"            console.log('Usuario seleccionado:', selectedUser.name);\r",
+							"        } else {\r",
+							"            console.log('Usuario con ID', userId, 'no encontrado.');\r",
+							"        }\r",
+							"    } else {\r",
+							"        console.log('No se encontraron usuarios.');\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"// Obtener todos los cursos\r",
+							"pm.sendRequest('http://localhost:8001/courses', function (err, response) {\r",
+							"    if (err) {\r",
+							"        console.log('Error al obtener cursos:', err);\r",
+							"        return;\r",
+							"    }\r",
+							"    \r",
+							"    const courses = response.json();\r",
+							"    \r",
+							"    // Verificar que la respuesta es válida\r",
+							"    if (Array.isArray(courses) && courses.length > 0) {\r",
+							"        // Seleccionar un ID de curso aleatorio del 1 al 30\r",
+							"        const courseId = Math.floor(Math.random() * 30) + 1;\r",
+							"        const selectedCourse = courses.find(course => course.id === courseId);\r",
+							"        \r",
+							"        if (selectedCourse) {\r",
+							"            pm.globals.set(\"courseId\", selectedCourse.id);\r",
+							"            pm.globals.set(\"courseName\", selectedCourse.name);\r",
+							"            console.log('Curso seleccionado:', selectedCourse.name);\r",
+							"        } else {\r",
+							"            console.log('Curso con ID', courseId, 'no encontrado.');\r",
+							"        }\r",
+							"    } else {\r",
+							"        console.log('No se encontraron cursos.');\r",
+							"    }\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"courseId\": {{courseId}},\r\n    \"userIds\": [{{userId}}]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8002/enrollments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8002",
+					"path": [
+						"enrollments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get enrollments",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Verificar que la respuesta es JSON\r",
+							"if (pm.response.headers.get('Content-Type') && pm.response.headers.get('Content-Type').includes('application/json')) {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    \r",
+							"    // Verificar que la respuesta es un array y no está vacía\r",
+							"    if (Array.isArray(responseJson) && responseJson.length > 0) {\r",
+							"        console.log('Inscripciones obtenidas:', responseJson);\r",
+							"    } else {\r",
+							"        console.log('No se encontraron inscripciones.');\r",
+							"    }\r",
+							"} else {\r",
+							"    console.log('La respuesta no está en formato JSON o no se ha retornado contenido.');\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8002/enrollments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8002",
+					"path": [
+						"enrollments"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,23 @@
+<div class="card">
+  <h2>Mi Perfil</h2>
+  <p>Email: {{ user?.email }}</p>
+  <h3>Carrito</h3>
+  <p-table [value]="cartProducts" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Producto</th>
+        <th>Precio</th>
+        <th>Cantidad</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-cartProduct>
+      <tr>
+        <td>{{ cartProduct.product.name }}</td>
+        <td>{{ cartProduct.product.price }}</td>
+        <td>{{ cartProduct.quantity }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <button pButton label="Vaciar Carrito" (click)="clearCart()" *ngIf="cartProducts.length"></button>
+  <button pButton label="Crear Orden" (click)="createOrder()" *ngIf="cartProducts.length" class="p-button-success"></button>
+</div>
