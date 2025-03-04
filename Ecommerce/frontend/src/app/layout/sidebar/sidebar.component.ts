@@ -39,8 +39,8 @@ export class SidebarComponent implements OnInit {
     private updateRoutes(): void {
         const baseRoutes = [
             {
-                title: 'Usuarios',
-                icon: 'users',
+                title: 'Carrito',
+                icon: 'shopping-cart',
                 link: ['/users'],
                 active: false,
             },

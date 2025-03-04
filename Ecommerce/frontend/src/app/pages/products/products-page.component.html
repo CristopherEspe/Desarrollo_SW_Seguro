@@ -9,6 +9,7 @@
         <th>Nombre</th>
         <th>Precio</th>
         <th>Categoría</th>
+        <th>Imagen</th>
         <th>Acciones</th>
       </tr>
     </ng-template>
@@ -17,6 +18,7 @@
         <td>{{ product.name }}</td>
         <td>{{ product.price }}</td>
         <td>{{ product.category }}</td>
+        <td><img [src]="product.imageUrl" alt="Imagen de {{ product.name }}" width="100"></td>
         <td>
           <button pButton label="Editar" (click)="showEditDialog(product)" class="p-button-warning" *ngIf="authService.hasRole('admin')"></button>
           <button pButton label="Eliminar" (click)="deleteProduct(product.id)" class="p-button-danger" *ngIf="authService.hasRole('admin')"></button>

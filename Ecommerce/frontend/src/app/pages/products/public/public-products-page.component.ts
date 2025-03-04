@@ -14,6 +14,7 @@ import { ProductDto } from '@app/models/product.dto';
 @Component({
   standalone: true,
   templateUrl: './public-products-page.component.html',
+  styleUrls: ['./public-products-page.component.scss'],
   imports: [SharedModule, TableModule, ButtonModule, InputTextModule, FormsModule]
 })
 export class PublicProductsPageComponent implements OnInit {
