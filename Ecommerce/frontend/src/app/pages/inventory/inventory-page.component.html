@@ -33,7 +33,7 @@
       </div>
       <div class="p-field">
         <label for="stock">Stock</label>
-        <input pInputText id="stock" type="number" [(ngModel)]="selectedInventory.stock" />
+        <input pInputText id="stock" type="number" [(ngModel)]="selectedInventory.stock" step="1" min="0" (input)="validateInteger($event)" />
       </div>
       <ng-template pTemplate="footer">
         <button pButton label="Guardar" (click)="saveInventory()" class="p-button-success"></button>

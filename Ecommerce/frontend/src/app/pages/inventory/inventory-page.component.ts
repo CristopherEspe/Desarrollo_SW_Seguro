@@ -108,4 +108,12 @@ export class InventoryPageComponent implements OnInit {
     const product = this.products.find(p => p.id === productId);
     return product ? product.name : 'Producto no encontrado';
   }
+
+  validateInteger(event: any) {
+    const value = event.target.value;
+    if (!Number.isInteger(Number(value))) {
+      event.target.value = Math.floor(Number(value));
+      this.selectedInventory.stock = Math.floor(Number(value));
+    }
+  }
 }
