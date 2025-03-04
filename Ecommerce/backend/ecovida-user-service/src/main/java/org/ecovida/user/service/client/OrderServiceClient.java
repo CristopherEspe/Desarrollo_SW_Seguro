@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.util.List;
 import java.util.Optional;
 
-@FeignClient(name = "order-service")
+@FeignClient(name = "order-service", url = "${app.feign.order-service.url}")
 public interface OrderServiceClient {
     @GetMapping("/orders/user/{userId}")
     List<OrderDto> getOrdersByUserId(@PathVariable("userId") String userId);

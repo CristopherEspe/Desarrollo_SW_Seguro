@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "inventory-service", url = "http://localhost:8083")
+@FeignClient(name = "inventory-service", url = "${app.feign.inventory-service.url}")
 public interface InventoryServiceClient {
     @GetMapping("/inventory/product/{productId}")
     InventoryDto getByProductId(@PathVariable("productId") Long productId);

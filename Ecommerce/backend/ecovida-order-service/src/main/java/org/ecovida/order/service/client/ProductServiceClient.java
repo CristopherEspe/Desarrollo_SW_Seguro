@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-@FeignClient(name = "product-service", url = "http://localhost:8082")
+@FeignClient(name = "product-service", url = "${app.feign.product-service.url}")
 public interface ProductServiceClient {
     @GetMapping("/products/{id}")
     Optional<ProductDto> getProductById(@PathVariable("id") Long id);

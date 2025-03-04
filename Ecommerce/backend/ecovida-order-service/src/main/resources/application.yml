@@ -26,3 +26,7 @@ app:
   feign:
     user-service:
       url: http://localhost:8081
+    product-service:
+      url: http://localhost:8082
+    inventory-service:
+      url: http://localhost:8083
