@@ -26,19 +26,4 @@ La Fundación "EcoVida" es una organización sin fines de lucro dedicada a la pr
 8. **SEO y Marketing Digital:** Estrategias de SEO y marketing digital para atraer tráfico y convertir visitantes en clientes.
 9. **Soporte al Cliente:** Chat en vivo y sistema de tickets para resolver dudas y problemas de los clientes.
 
-## Arquitectura y Tecnologías
 
-El sistema se implementa utilizando servicios web del tipo **REST** y **SOAP** dentro de una arquitectura de **microservicios**, lo que permite escalabilidad, flexibilidad y mantenibilidad.
-
-- **Backend:** Desarrollado de forma integral y respaldado por pruebas unitarias.  
-  Repositorio en GitHub: [Enlace al repositorio Backend](#)
-- **Frontend:** Interfaz de usuario con pruebas end-to-end (E2E) que garantizan la funcionalidad completa.  
-  Repositorio en GitHub: [Enlace al repositorio Frontend](#)
-
-## Instalación y Ejecución
-
-### Backend
-
-1. Clona el repositorio:
-   ```bash
-   git clone https://github.com/tuusuario/backend-ecovida.git
